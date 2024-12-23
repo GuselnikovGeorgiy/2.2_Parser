@@ -14,6 +14,7 @@ RESULTS_URL = "https://spimex.com/markets/oil_products/trades/results/"
 
 
 def get_reports():
+    """Получаем все ссылки на отчеты с сайта с 2023 года"""
     response = requests.get(RESULTS_URL)
     soup = BeautifulSoup(response.text, "lxml")
     pages = soup.find("div", {"class": "bx-pagination"}).find_all("a")
@@ -39,6 +40,7 @@ def get_reports():
 
 
 def process_report(url):
+    """Скачиваем отчет по ссылке в ОЗУ, затем записываем данные в датафрейм"""
     response = requests.get(BASE_URL+url)
     response.raise_for_status()
 
@@ -78,6 +80,7 @@ def process_report(url):
 
 
 def write_to_db(dataframe, report_date):
+    """Пишем отчет в базу данных"""
     print(f"Writing to DB: {report_date}")
     records = []
     for _, row in dataframe.iterrows():
